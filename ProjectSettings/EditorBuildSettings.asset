@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/NinjaEscape.unity
+    path: Assets/Scenes/NinjaEscapeTest.unity
     guid: 93d17697bb94ec4468e5b43d0b087b1b
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
