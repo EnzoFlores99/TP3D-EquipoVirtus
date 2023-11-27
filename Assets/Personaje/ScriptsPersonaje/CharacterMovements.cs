@@ -41,7 +41,6 @@ public class CharacterMovements : MonoBehaviour
         anim.SetFloat("VelX",x);
         anim.SetFloat("VelY",y);
 
-        //if
         if (canJump == true)
         {
           if(Input.GetKeyDown(KeyCode.Space))
@@ -61,6 +60,5 @@ public class CharacterMovements : MonoBehaviour
     {
         anim.SetBool("InFloor", false);
         anim.SetBool("IsJumping", false);
-
     }
 }

@@ -5,26 +5,27 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    public float playerSpeed = 10f;
+    public float playerSpeed = 12f;
+    public float rotationSpeed = 200.0f;
     public float jumpForce = 10f;
-    public float dashForce = 30f;
+    public float dashForce = 300f;
     private bool canDash = false;
     private float groundDistance;
+    private Animator anim;
 
-    public float gravityControl = 5f;
+    public float gravityControl = 10f;
 
     private Rigidbody rb;
-    private Transform cam;
-
-    private float turnSmoothTime = 0.1f;
-    private float turnSmoothVelocity;
     [SerializeField] private TrailRenderer tr;
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        cam = Camera.main.transform;
-        groundDistance = (GetComponent<CapsuleCollider>().height / 2) + 0.3f;
+
+        Vector3 scale = transform.localScale;
+        groundDistance = scale.y + 0.3f;
+
         tr.emitting = false;
         Physics.gravity *= gravityControl;
 
@@ -43,31 +44,20 @@ public class PlayerController : MonoBehaviour
     {
         IsGrounded();
         HandleJumpAndDash();
-
-        if (IsGrounded())
-        {
-            tr.emitting = false;
-        }
     }
 
     void MovePlayer()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        float horizontal, vertical;
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
 
-        if (direction.magnitude >= 0.1f)
-        {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+        transform.Rotate(0, horizontal * Time.deltaTime * rotationSpeed, 0);
+        transform.Translate(0, 0, vertical * Time.deltaTime * playerSpeed);
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            // Utilizar MovePosition para actualizar la posición del Rigidbody
-            rb.MovePosition(transform.position + moveDir * playerSpeed * Time.fixedDeltaTime);
-        }
+        anim.SetFloat("VelX", horizontal);
+        anim.SetFloat("VelY", vertical);
+        anim.SetBool("InFloor", true);
     }
 
     void HandleJumpAndDash()
@@ -76,29 +66,53 @@ public class PlayerController : MonoBehaviour
         {
             if (IsGrounded())
             {
+                anim.SetBool("IsJumping", true);
+
                 float requiredVelocity = Mathf.Sqrt(2 * jumpForce * Mathf.Abs(Physics.gravity.y));
+
                 // Establecer la velocidad vertical directamente
                 rb.velocity = new Vector3(rb.velocity.x, requiredVelocity, rb.velocity.z);
 
                 canDash = true;
             }
-            else if (!IsGrounded() && canDash)
+            else if (canDash)
             {
                 StartCoroutine(Dash());
             }
         }
+        if (!IsGrounded())
+        {
+            anim.SetBool("InFloor", false);
+            anim.SetBool("IsJumping", false);
+        }
     }
+
     private IEnumerator Dash()
     {
         canDash = false;
         tr.emitting = true;
 
-        rb.velocity = new Vector3(transform.forward.x * dashForce, 0f, transform.forward.z * dashForce);
+        // Almacena la gravedad original
+        Vector3 originalGravity = Physics.gravity;
+
+        // Obtén la dirección hacia adelante del personaje
+        Vector3 dashDirection = transform.forward;
+
+        // Aplica la fuerza de dash como una fuerza adicional
+        rb.AddForce(dashDirection * dashForce, ForceMode.VelocityChange);
+
+        // Reduce la gravedad temporalmente
+        Physics.gravity /= gravityControl;
+
         yield return new WaitForSeconds(0.3f);
+
+        // Restaura la gravedad original
+        Physics.gravity = originalGravity;
+
         rb.velocity = Vector3.zero;
         tr.emitting = false;
-
     }
+
     private bool IsGrounded()
     {
         RaycastHit hit;
