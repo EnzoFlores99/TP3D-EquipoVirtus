@@ -40,9 +40,9 @@ public class Health_Player : MonoBehaviour
     }
     IEnumerator FrenarVelocidad()
     {
-        var velocidadActual = GetComponent<CharacterMovements>().velocidadMovimiento;
-        GetComponent<CharacterMovements>().velocidadMovimiento = 2;
+        var velocidadActual = GetComponent<PlayerController>().playerSpeed;
+        GetComponent<PlayerController>().playerSpeed = 2;
         yield return new WaitForSeconds(tiempoFrenado);
-        GetComponent<CharacterMovements>().velocidadMovimiento= velocidadActual;
+        GetComponent<PlayerController>().playerSpeed= velocidadActual;
     }
 }
