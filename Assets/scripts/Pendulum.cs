@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class Pendulum : MonoBehaviour
 {
-	[SerializeField] private float speed = 5f;
-	public float limit = 75f; //Limit in degrees of the movement
-	public bool randomStart = false; //If you want to modify the start position
-	private float random = 0;
+	[SerializeField] private float speed;
+	public float limit = 750f;
+	public bool randomStart = true;
+	private float random = 0f;
 
-	// Start is called before the first frame update
+	
 	void Awake()
     {
-		if(randomStart)
-			random = Random.Range(0f, 2f);
+		if(randomStart){
+			random = Random.Range(0f, 3f);
+		}
+			
 	}
 
-    // Update is called once per frame
+    
     void Update()
     {
 		float angle = limit * Mathf.Sin(Time.time + random * speed);
