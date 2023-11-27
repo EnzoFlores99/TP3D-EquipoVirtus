@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
 
         Vector3 scale = transform.localScale;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
+            anim.SetBool("IsJumping", true);
             if (IsGrounded())
             {
                 anim.SetBool("IsJumping", true);
@@ -77,6 +79,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (canDash)
             {
+                
                 StartCoroutine(Dash());
             }
         }
@@ -117,5 +120,7 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
         return Physics.Raycast(transform.position, -transform.up, out hit, groundDistance);
+        //anim.SetBool("IsJumping", false);
+       
     }
 }
