@@ -11,9 +11,12 @@ public class PlayerController : MonoBehaviour
     private bool canDash = false;
     private float groundDistance;
 
+    public float x, y;
+
     public float gravityControl = 5f;
 
     private Rigidbody rb;
+    private Animator anim;
     private Transform cam;
 
     private float turnSmoothTime = 0.1f;
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         cam = Camera.main.transform;
         groundDistance = (GetComponent<CapsuleCollider>().height / 2) + 0.3f;
@@ -43,6 +47,12 @@ public class PlayerController : MonoBehaviour
     {
         IsGrounded();
         HandleJumpAndDash();
+        
+
+        x= Input.GetAxis("Horizontal");
+        y= Input.GetAxis("Vertical");
+        anim.SetFloat("VelX",x);
+        anim.SetFloat("VelY",y);
 
         if (IsGrounded())
         {
@@ -74,16 +84,21 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
+            anim.SetBool("IsJumping", true);
             if (IsGrounded())
             {
+                
+                
                 float requiredVelocity = Mathf.Sqrt(2 * jumpForce * Mathf.Abs(Physics.gravity.y));
                 // Establecer la velocidad vertical directamente
                 rb.velocity = new Vector3(rb.velocity.x, requiredVelocity, rb.velocity.z);
 
                 canDash = true;
             }
+             
             else if (!IsGrounded() && canDash)
             {
+                
                 StartCoroutine(Dash());
             }
         }
@@ -103,5 +118,7 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
         return Physics.Raycast(transform.position, -transform.up, out hit, groundDistance);
+        //anim.SetBool("IsJumping", false);
+       
     }
 }
