@@ -13,6 +13,8 @@ public class Health_Player : MonoBehaviour
     public float tiempoFrenado = 1.5f;
     private bool isInLava = false;
 
+    public AudioSource audioGolpe; // referencia al audio de golpe
+
     private void Awake()
     {
         instance = this;
@@ -21,10 +23,13 @@ public class Health_Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+       //audioGolpe = GetComponent<AudioSource>();
     }
 
     public void RestarVida(int cantidad)
     {
+        PlayPunchSound();
+        
         if (!invencible && vida > 0)
         {
             vida -= cantidad;
@@ -84,5 +89,12 @@ public class Health_Player : MonoBehaviour
         rb.AddForce(pushDirection * 50f, ForceMode.VelocityChange);
         yield return new WaitForSeconds(tiempoFrenado);
         isInLava = false;
+    }
+
+    private void PlayPunchSound(){
+        
+        if (audioGolpe != null){
+            audioGolpe.Play();
+        }
     }
 }

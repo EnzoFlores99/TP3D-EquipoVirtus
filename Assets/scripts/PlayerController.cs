@@ -8,6 +8,11 @@ public class PlayerController : MonoBehaviour
     public float playerSpeed = 12f;
     public float rotationSpeed = 200.0f;
     public float jumpForce = 10f;
+    public AudioSource audioSource; // referencia al audio de salto
+    public AudioSource audioDash; // referencia al audio del dash
+    //private AudioSource audioGolpe; // referencia al audio de golpe
+
+    //public GameObject sonidoGolpe;
     public float dashForce = 300f;
     private bool canDash = false;
     private float groundDistance;
@@ -19,6 +24,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        //audioSource = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -68,6 +74,7 @@ public class PlayerController : MonoBehaviour
             if (IsGrounded())
             {
                 anim.SetBool("IsJumping", true);
+                PlayJumpSound();
 
                 float requiredVelocity = Mathf.Sqrt(2 * jumpForce * Mathf.Abs(Physics.gravity.y));
 
@@ -93,6 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         canDash = false;
         tr.emitting = true;
+        PlayDashSound();
 
         // Almacena la gravedad original
         Vector3 originalGravity = Physics.gravity;
@@ -121,5 +129,19 @@ public class PlayerController : MonoBehaviour
         return Physics.Raycast(transform.position, -transform.up, out hit, groundDistance);
         //anim.SetBool("IsJumping", false);
 
+    }
+
+    private void PlayJumpSound(){
+        
+        if (audioSource != null){
+            audioSource.Play();
+        }
+    }
+
+    private void PlayDashSound(){
+        
+        if (audioDash != null){
+            audioDash.Play();
+        }
     }
 }
