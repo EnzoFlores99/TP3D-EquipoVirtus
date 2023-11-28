@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
     [SerializeField] private TrailRenderer tr;
+    [SerializeField] private AudioClip jumpSound;
+    public AudioSource run;
+    private bool Hactive;
+    private bool Vactive;
 
     void Start()
     {
@@ -58,6 +62,32 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("VelX", horizontal);
         anim.SetFloat("VelY", vertical);
         anim.SetBool("InFloor", true);
+        if (Input.GetButtonDown("Horizontal"))
+        {
+            Hactive = true;
+            run.Play();
+        }
+        if (Input.GetButtonDown("Vertical"))
+        {
+            Vactive = true;
+            run.Play();
+        }
+        if (Input.GetButtonUp("Horizontal"))
+        {
+            Hactive = false;
+            if(Vactive == false)
+            {
+                run.Pause();
+            }
+        }
+        if (Input.GetButtonUp("Vertical"))
+        {
+            Vactive = false;
+            if (Hactive == false)
+            {
+                run.Pause();
+            }
+        }
     }
 
     void HandleJumpAndDash()
@@ -75,6 +105,8 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector3(rb.velocity.x, requiredVelocity, rb.velocity.z);
 
                 canDash = true;
+                SoundsController.Instance.ExecuteSound(jumpSound);
+                run.Stop();
             }
             else if (canDash)
             {

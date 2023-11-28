@@ -13,14 +13,14 @@ EditorBuildSettings:
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Juego3D-Menu-Final/Escenas/MainMenu.unity
-    guid: 61281ad33ae51384d8930efdd74a973e
-  - enabled: 1
-    path: Assets/Juego3D-Menu-Final/Escenas/Options.unity
-    guid: 63cdde2d61da83e43ad7ba9c810ab049
+    guid: b16385676bdc684448f48e41b808cb9c
   - enabled: 1
     path: Assets/Juego3D-Menu-Final/Escenas/Winner.unity
     guid: a7d4c3318531b4d41b156da9172d38d6
   - enabled: 1
     path: Assets/Juego3D-Menu-Final/Escenas/Loser.unity
     guid: 2c45685d017cd3f4fa966a6aa0d4dc5b
+  - enabled: 1
+    path: Assets/Scenes/NinjaEscape.unity
+    guid: 6dc06789fde114245ae791e76897e5b0
   m_configObjects: {}
