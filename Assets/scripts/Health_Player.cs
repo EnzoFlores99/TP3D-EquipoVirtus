@@ -23,13 +23,13 @@ public class Health_Player : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-       //audioGolpe = GetComponent<AudioSource>();
+        //audioGolpe = GetComponent<AudioSource>();
     }
 
     public void RestarVida(int cantidad)
     {
         PlayPunchSound();
-        
+
         if (!invencible && vida > 0)
         {
             vida -= cantidad;
@@ -67,7 +67,11 @@ public class Health_Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Lava"))
+        if (collision.gameObject.CompareTag("Traps") && !invencible)
+        {
+            RestarVida(1);
+        }
+        if (collision.gameObject.CompareTag("Lava") && !invencible)
         {
             if (!isInLava)
             {
@@ -91,9 +95,11 @@ public class Health_Player : MonoBehaviour
         isInLava = false;
     }
 
-    private void PlayPunchSound(){
-        
-        if (audioGolpe != null){
+    private void PlayPunchSound()
+    {
+
+        if (audioGolpe != null)
+        {
             audioGolpe.Play();
         }
     }

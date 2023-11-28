@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Lava
+  - Traps
   layers:
   - Default
   - TransparentFX
