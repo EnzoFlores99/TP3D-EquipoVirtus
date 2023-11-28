@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Health_Player : MonoBehaviour
 {
-     public static Health_Player instance;
+    public static Health_Player instance;
+    private Rigidbody rb;
     public int vida = 5;
     public bool invencible = false;
     public float timepoInvencible = 1.5f;
     public float tiempoFrenado = 1.5f;
+    private bool isInLava = false;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
     }
 
     public void RestarVida(int cantidad)
@@ -22,14 +30,19 @@ public class Health_Player : MonoBehaviour
             vida -= cantidad;
             StartCoroutine(Invulnerabilidad());
             StartCoroutine(FrenarVelocidad());
-           UIControllerHealt.instance.UpdateHealthDisplay();
+            UIControllerHealt.instance.UpdateHealthDisplay();
         }
         if (vida <= 0)
         {
-            //gameObject.SetActive(false);
-            Debug.Log("GAMEOVER");
+            CambiarEscena("Loser");
         }
-       
+    }
+
+    public void CambiarEscena(string nombre)
+    {
+
+        SceneManager.LoadScene(nombre);
+
     }
 
     IEnumerator Invulnerabilidad()
@@ -38,11 +51,38 @@ public class Health_Player : MonoBehaviour
         yield return new WaitForSeconds(timepoInvencible);
         invencible = false;
     }
+
     IEnumerator FrenarVelocidad()
     {
-        var velocidadActual = GetComponent<CharacterMovements>().velocidadMovimiento;
-        GetComponent<CharacterMovements>().velocidadMovimiento = 2;
+        var velocidadActual = GetComponent<PlayerController>().playerSpeed;
+        GetComponent<PlayerController>().playerSpeed /= 2;
         yield return new WaitForSeconds(tiempoFrenado);
-        GetComponent<CharacterMovements>().velocidadMovimiento= velocidadActual;
+        GetComponent<PlayerController>().playerSpeed = velocidadActual;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Lava"))
+        {
+            if (!isInLava)
+            {
+                isInLava = true;
+                RestarVida(1);
+
+                if (rb != null)
+                {
+                    StartCoroutine(EmpujarJugador(collision));
+                }
+            }
+        }
+    }
+
+    IEnumerator EmpujarJugador(Collision collision)
+    {
+        // Obtener la dirección relativa entre el jugador y la lava
+        Vector3 pushDirection = (transform.position - collision.contacts[0].point).normalized;
+        rb.AddForce(pushDirection * 50f, ForceMode.VelocityChange);
+        yield return new WaitForSeconds(tiempoFrenado);
+        isInLava = false;
     }
 }

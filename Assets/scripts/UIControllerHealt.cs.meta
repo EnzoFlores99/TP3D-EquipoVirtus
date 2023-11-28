@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/scripts/UIControllerHealt.cs.meta
 guid: e1bc218c6a83a16458e1e02f9b9048b8
+========
+guid: 5df6091775cb9084489a78196d382688
+>>>>>>>> Dev:Assets/scripts/DamageObstacle.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
