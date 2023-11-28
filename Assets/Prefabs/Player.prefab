@@ -2018,12 +2018,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 861562409192321581}
-  - component: {fileID: 2569238595550070798}
   - component: {fileID: 5347956187708682016}
   - component: {fileID: 8621928494661608586}
   - component: {fileID: 527706694078723796}
   - component: {fileID: 8120933680899590991}
   - component: {fileID: 1839545596502673327}
+  - component: {fileID: 4722922396359367353}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2050,24 +2050,6 @@ Transform:
   - {fileID: 5249515411653757370}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2569238595550070798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7273315563788467743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bed7901558810f44bc21576405377d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSpeed: 10
-  rotationSpeed: 200
-  jumpForce: 10
-  dashForce: 300
-  gravityControl: 10
-  tr: {fileID: 527706694078723796}
 --- !u!54 &5347956187708682016
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2268,6 +2250,24 @@ MonoBehaviour:
   invencible: 0
   timepoInvencible: 1.5
   tiempoFrenado: 1.5
+--- !u!114 &4722922396359367353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273315563788467743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0424fc72c23364a4c9208a4c5b42fd40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpeed: 12
+  rotationSpeed: 200
+  jumpForce: 10
+  dashForce: 300
+  gravityControl: {x: 0, y: -98, z: 0}
+  tr: {fileID: 527706694078723796}
 --- !u!1 &7408299551242333889
 GameObject:
   m_ObjectHideFlags: 0
