@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool canDash = false;
     private float groundDistance;
     private Animator anim;
-
-    public float gravityControl = 10f;
+    public Vector3 gravityControl = new Vector3(0f, -98f, 0f);
 
     private Rigidbody rb;
     [SerializeField] private TrailRenderer tr;
@@ -28,7 +27,7 @@ public class PlayerController : MonoBehaviour
         groundDistance = scale.y + 0.3f;
 
         tr.emitting = false;
-        Physics.gravity *= gravityControl;
+        Physics.gravity = gravityControl;
 
         if (rb == null)
         {
@@ -79,7 +78,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (canDash)
             {
-                
+
                 StartCoroutine(Dash());
             }
         }
@@ -105,7 +104,7 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(dashDirection * dashForce, ForceMode.VelocityChange);
 
         // Reduce la gravedad temporalmente
-        Physics.gravity /= gravityControl;
+        Physics.gravity /= gravityControl.y;
 
         yield return new WaitForSeconds(0.3f);
 
@@ -121,6 +120,6 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         return Physics.Raycast(transform.position, -transform.up, out hit, groundDistance);
         //anim.SetBool("IsJumping", false);
-       
+
     }
 }
